@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using CarDealershipAPI.Data;
 using CarDealershipAPI.Extensions;
 using CarDealershipAPI.Middleware;
+using CarDealershipAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddSwaggerDocumentation();
+
+builder.Services.AddScoped<IOtpService, OtpService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 // CORS policy
 builder.Services.AddCors(options =>
@@ -33,13 +37,13 @@ builder.Logging.AddDebug();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Car Dealership API v1");
-        c.RoutePrefix = string.Empty; // Makes Swagger available at the root
+        c.RoutePrefix = string.Empty; // This makes Swagger available at the root
     });
 }
 
@@ -75,6 +79,9 @@ using (var scope = app.Services.CreateScope())
         logger.LogError(ex, "An error occurred while initializing the database");
     }
 }
+
+app.MapGet("/", () => Results.Redirect("/swagger"));
+
 
 app.Run();
 
