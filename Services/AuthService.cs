@@ -43,8 +43,8 @@ namespace CarDealershipAPI.Services
                     };
                 }
 
-                // Store user data temporarily in session/cache (for demo, we'll recreate during verification)
-                // In production, you'd store this in cache/session
+                // Store user data temporarily in session/cache (for demo, I'll recreate during verification)
+                // In production, I'd store this in cache/session
 
                 // Generate OTP
                 await _otpService.GenerateOtpAsync(request.Email, OtpPurpose.Registration);
@@ -88,8 +88,8 @@ namespace CarDealershipAPI.Services
                     };
                 }
 
-                // For demo purposes, we'll create a default customer account
-                // In production, you'd retrieve the stored registration data
+                // For demo purposes, I'll create a default customer account
+                // In production, I'd retrieve the stored registration data
                 var user = new User
                 {
                     FirstName = "New",
